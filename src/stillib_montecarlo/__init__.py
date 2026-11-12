@@ -1,6 +1,6 @@
 from .distributions import Binomial, Normal, Poisson, Uniform
-from .propagation import propagate
-from .sources import Constant, Empirical, Model, Source
+from .propagation import propagate, propagate_numpy
+from .sources import Constant, Empirical, Model, NumpyModel, NumpySource, Source
 
 __all__ = [
     "Source",
@@ -12,4 +12,7 @@ __all__ = [
     "Poisson",
     "Binomial",
     "propagate",
+    "propagate_numpy",
+    "NumpyModel",
+    "NumpySource",
 ]

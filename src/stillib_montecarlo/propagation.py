@@ -41,7 +41,7 @@ def propagate(
 def propagate_numpy(
     rng: np.random.Generator,
     func: Callable[..., NDArray[ResultNDType]],
-    inputs: Sequence[NumpySource[Any]],
+    inputs: Sequence[NumpySource],
     n_samples: int = 1_000,
 ) -> NDArray[ResultNDType]:
     """Propagate uncertainties through a function using Monte Carlo sampling with NumPy arrays.

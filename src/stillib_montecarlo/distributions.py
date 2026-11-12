@@ -4,11 +4,11 @@ from typing import Any
 import numpy as np
 from numpy.typing import NDArray
 
-from .sources import NumpySource
+from .sources import NumpySource, Source
 
 
 @dataclass(frozen=True, slots=True)
-class Normal(NumpySource[float]):
+class Normal(Source[float], NumpySource):
     """A source that returns values sampled from a specified Normal distribution."""
 
     mean: float
@@ -26,7 +26,7 @@ class Normal(NumpySource[float]):
 
 
 @dataclass(frozen=True, slots=True)
-class Uniform(NumpySource[float]):
+class Uniform(Source[float], NumpySource):
     """A source that returns values sampled from a specified Uniform distribution."""
 
     low: float
@@ -44,7 +44,7 @@ class Uniform(NumpySource[float]):
 
 
 @dataclass(frozen=True, slots=True)
-class Poisson(NumpySource[int]):
+class Poisson(Source[int], NumpySource):
     """A source that returns values sampled from a specified Poisson distribution."""
 
     mean: float
@@ -61,7 +61,7 @@ class Poisson(NumpySource[int]):
 
 
 @dataclass(frozen=True, slots=True)
-class Binomial(NumpySource[int]):
+class Binomial(Source[int], NumpySource):
     """A source that returns values sampled from a specified Binomial distribution."""
 
     n: int

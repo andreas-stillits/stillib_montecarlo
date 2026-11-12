@@ -14,7 +14,7 @@ class Source(ABC, Generic[SampleType]):
     def sample_once(self, rng: np.random.Generator) -> SampleType: ...
 
 
-class NumpySource(Source[SampleType], Generic[SampleType]):
+class NumpySource(ABC):
     # inherits sample_once from Source as well
     @abstractmethod
     def sample_numpy(
@@ -23,7 +23,7 @@ class NumpySource(Source[SampleType], Generic[SampleType]):
 
 
 @dataclass(frozen=True, slots=True)
-class Constant(NumpySource[SampleType], Generic[SampleType]):
+class Constant(Source[SampleType], NumpySource, Generic[SampleType]):
     """A source that always returns the same value."""
 
     _value: SampleType
@@ -39,7 +39,7 @@ class Constant(NumpySource[SampleType], Generic[SampleType]):
 
 
 @dataclass(frozen=True, slots=True, init=False)
-class Empirical(NumpySource[SampleType], Generic[SampleType]):
+class Empirical(Source[SampleType], NumpySource, Generic[SampleType]):
     """A source that returns values sampled with replacement from an empirical distribution."""
 
     _values: tuple[SampleType, ...]
@@ -78,13 +78,10 @@ class Model(Source[SampleType], Generic[SampleType]):
 
 
 @dataclass(frozen=True, slots=True)
-class NumpyModel(NumpySource[Any]):
+class NumpyModel(NumpySource):
     """A source created from a NumPy batch-sampling model, i.e. any callable taking an RNG and n_samples as its arguments and returning a numpy array."""
 
     model: Callable[[np.random.Generator, int], NDArray[Any]]
-
-    def sample_once(self, rng: np.random.Generator) -> Any:
-        return self.sample_numpy(rng, 1)[0]
 
     def sample_numpy(self, rng: np.random.Generator, n_samples: int) -> NDArray[Any]:
 

@@ -2,13 +2,12 @@ from dataclasses import dataclass
 from typing import Any
 
 import numpy as np
-from numpy.typing import NDArray
 
-from .sources import NumpySource, Source
+from .sources import Source
 
 
 @dataclass(frozen=True, slots=True)
-class Normal(Source[float], NumpySource):
+class Normal(Source[float]):
     """A source that returns values sampled from a specified Normal distribution."""
 
     mean: float
@@ -18,15 +17,12 @@ class Normal(Source[float], NumpySource):
         if not self.sigma >= 0:
             raise ValueError("Standard deviation sigma must be non-negative.")
 
-    def sample_once(self, rng: np.random.Generator) -> float:
+    def sample(self, rng: np.random.Generator) -> float:
         return rng.normal(loc=self.mean, scale=self.sigma)
-
-    def sample_numpy(self, rng: np.random.Generator, n_samples: int) -> NDArray[Any]:
-        return rng.normal(loc=self.mean, scale=self.sigma, size=n_samples)
 
 
 @dataclass(frozen=True, slots=True)
-class Uniform(Source[float], NumpySource):
+class Uniform(Source[float]):
     """A source that returns values sampled from a specified Uniform distribution."""
 
     low: float
@@ -36,15 +32,12 @@ class Uniform(Source[float], NumpySource):
         if not self.low <= self.high:
             raise ValueError("Lower bound must be less than upper bound.")
 
-    def sample_once(self, rng: np.random.Generator) -> float:
+    def sample(self, rng: np.random.Generator) -> float:
         return rng.uniform(low=self.low, high=self.high)
-
-    def sample_numpy(self, rng: np.random.Generator, n_samples: int) -> NDArray[Any]:
-        return rng.uniform(low=self.low, high=self.high, size=n_samples)
 
 
 @dataclass(frozen=True, slots=True)
-class Poisson(Source[int], NumpySource):
+class Poisson(Source[int]):
     """A source that returns values sampled from a specified Poisson distribution."""
 
     mean: float
@@ -53,15 +46,12 @@ class Poisson(Source[int], NumpySource):
         if not self.mean >= 0:
             raise ValueError("Mean must be non-negative.")
 
-    def sample_once(self, rng: np.random.Generator) -> int:
+    def sample(self, rng: np.random.Generator) -> int:
         return rng.poisson(lam=self.mean)
-
-    def sample_numpy(self, rng: np.random.Generator, n_samples: int) -> NDArray[Any]:
-        return rng.poisson(lam=self.mean, size=n_samples)
 
 
 @dataclass(frozen=True, slots=True)
-class Binomial(Source[int], NumpySource):
+class Binomial(Source[int]):
     """A source that returns values sampled from a specified Binomial distribution."""
 
     n: int
@@ -73,8 +63,5 @@ class Binomial(Source[int], NumpySource):
         if not self.n >= 0:
             raise ValueError("Number of trials n must be non-negative.")
 
-    def sample_once(self, rng: np.random.Generator) -> int:
+    def sample(self, rng: np.random.Generator) -> int:
         return rng.binomial(n=self.n, p=self.p)
-
-    def sample_numpy(self, rng: np.random.Generator, n_samples: int) -> NDArray[Any]:
-        return rng.binomial(n=self.n, p=self.p, size=n_samples)

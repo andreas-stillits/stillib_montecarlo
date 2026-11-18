@@ -34,3 +34,12 @@ def propagate(
         result = func(*sampled_inputs)
         results.append(result)
     return results
+
+
+def propagate_pool(
+    seed: int,
+    func: Callable[..., ResultType],
+    inputs: Sequence[Source[Any]],
+    workers: int | None = None,
+    n_samples: int = 1_000,
+) -> list[ResultType]: ...
